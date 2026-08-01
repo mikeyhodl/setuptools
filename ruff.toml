@@ -72,6 +72,8 @@ ignore = [
 [lint.per-file-ignores]
 # Suppress nuisance warnings about module-import-not-at-top-of-file (E402) due to workaround for #4476
 "setuptools/__init__.py" = ["E402"]
+# Intentionally BOM-prefixed test fixture with a non-identifier filename
+"setuptools/tests/script-with-bom.py" = ["N999"]
 
 [lint.isort]
 combine-as-imports = true

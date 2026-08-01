@@ -1,6 +1,7 @@
 """install_scripts tests"""
 
 import sys
+from typing import ClassVar
 
 import pytest
 
@@ -11,11 +12,11 @@ from . import contexts
 
 
 class TestInstallScripts:
-    settings = dict(
-        name='foo',
-        entry_points={'console_scripts': ['foo=foo:foo']},
-        version='0.0',
-    )
+    settings: ClassVar[dict] = {
+        'name': 'foo',
+        'entry_points': {'console_scripts': ['foo=foo:foo']},
+        'version': '0.0',
+    }
     unix_exe = '/usr/dummy-test-path/local/bin/python'
     unix_spaces_exe = '/usr/bin/env dummy-test-python'
     win32_exe = 'C:\\Dummy Test Path\\Program Files\\Python 3.6\\python.exe'

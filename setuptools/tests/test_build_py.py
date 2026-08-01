@@ -3,6 +3,7 @@ import shutil
 import stat
 import warnings
 from pathlib import Path
+from typing import ClassVar
 from unittest.mock import Mock
 
 import jaraco.path
@@ -21,14 +22,12 @@ def test_directories_in_package_data_glob(tmpdir_cwd):
 
     Regression test for #261.
     """
-    dist = Distribution(
-        dict(
-            script_name='setup.py',
-            script_args=['build_py'],
-            packages=[''],
-            package_data={'': ['path/*']},
-        )
-    )
+    dist = Distribution({
+        'script_name': 'setup.py',
+        'script_args': ['build_py'],
+        'packages': [''],
+        'package_data': {'': ['path/*']},
+    })
     os.makedirs('path/subpath')
     dist.parse_command_line()
     dist.run_commands()
@@ -41,14 +40,12 @@ def test_recursive_in_package_data_glob(tmpdir_cwd):
 
     #1806
     """
-    dist = Distribution(
-        dict(
-            script_name='setup.py',
-            script_args=['build_py'],
-            packages=[''],
-            package_data={'': ['path/**/data']},
-        )
-    )
+    dist = Distribution({
+        'script_name': 'setup.py',
+        'script_args': ['build_py'],
+        'packages': [''],
+        'package_data': {'': ['path/**/data']},
+    })
     os.makedirs('path/subpath/subsubpath')
     open('path/subpath/subsubpath/data', 'wb').close()
 
@@ -69,14 +66,12 @@ def test_read_only(tmpdir_cwd):
 
     #1451
     """
-    dist = Distribution(
-        dict(
-            script_name='setup.py',
-            script_args=['build_py'],
-            packages=['pkg'],
-            package_data={'pkg': ['data.dat']},
-        )
-    )
+    dist = Distribution({
+        'script_name': 'setup.py',
+        'script_args': ['build_py'],
+        'packages': ['pkg'],
+        'package_data': {'pkg': ['data.dat']},
+    })
     os.makedirs('pkg')
     open('pkg/__init__.py', 'wb').close()
     open('pkg/data.dat', 'wb').close()
@@ -100,14 +95,12 @@ def test_executable_data(tmpdir_cwd):
 
     #2041
     """
-    dist = Distribution(
-        dict(
-            script_name='setup.py',
-            script_args=['build_py'],
-            packages=['pkg'],
-            package_data={'pkg': ['run-me']},
-        )
-    )
+    dist = Distribution({
+        'script_name': 'setup.py',
+        'script_args': ['build_py'],
+        'packages': ['pkg'],
+        'package_data': {'pkg': ['run-me']},
+    })
     os.makedirs('pkg')
     open('pkg/__init__.py', 'wb').close()
     open('pkg/run-me', 'wb').close()
@@ -252,7 +245,7 @@ def test_existing_egg_info(tmpdir_cwd, monkeypatch):
     assert build_py.data_files
 
     # Make sure the list of outputs is actually OK
-    outputs = map(lambda x: x.replace(os.sep, "/"), build_py.get_outputs())
+    outputs = (x.replace(os.sep, "/") for x in build_py.get_outputs())
     assert outputs
     example = str(Path(build_py.build_lib, "mypkg/__init__.py")).replace(os.sep, "/")
     assert example in outputs
@@ -335,7 +328,7 @@ def test_get_outputs(tmpdir_cwd):
 
 
 class TestTypeInfoFiles:
-    PYPROJECTS = {
+    PYPROJECTS: ClassVar[dict] = {
         "default_pyproject": DALS(
             """
             [project]
@@ -368,7 +361,7 @@ class TestTypeInfoFiles:
         ),
     }
 
-    EXAMPLES = {
+    EXAMPLES: ClassVar[dict] = {
         "simple_namespace": {
             "directory_structure": {
                 "foo": {

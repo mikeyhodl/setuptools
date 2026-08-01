@@ -55,9 +55,9 @@ class install_with_pth(install):
             self.install_lib = self.install_libbase
 
 
-setup_params = dict(
-    cmdclass={'install': install_with_pth},
-)
+setup_params = {
+    'cmdclass': {'install': install_with_pth},
+}
 
 if __name__ == '__main__':
     # allow setup.py to run from another directory

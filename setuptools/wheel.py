@@ -160,10 +160,10 @@ class Wheel:
             os.path.join(egg_info, 'PKG-INFO'),
         )
         setup_dist = setuptools.Distribution(
-            attrs=dict(
-                install_requires=install_requires,
-                extras_require=extras_require,
-            ),
+            attrs={
+                "install_requires": install_requires,
+                "extras_require": extras_require,
+            },
         )
         with disable_info_traces():
             write_requirements(
@@ -196,11 +196,11 @@ class Wheel:
                 markers = req.marker._markers
             except AttributeError:
                 markers = ()
-            return set(
+            return {
                 marker[2].value
                 for marker in markers
                 if isinstance(marker, tuple) and marker[0].value == 'extra'
-            )
+            }
 
         install_requires = list(
             map(raw_req, filter(eval, itertools.filterfalse(for_extra, reqs)))
